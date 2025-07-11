@@ -1,0 +1,36 @@
+{
+  "name": "socios-fantasy-league",
+  "version": "1.0.0",
+  "description": "Socios Fan Token Fantasy League - A fantasy football application built on Chiliz Network",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "start": "cd backend && npm start",
+    "test": "npm run test:frontend && npm run test:backend",
+    "test:frontend": "cd frontend && npm test",
+    "test:backend": "cd backend && npm test"
+  },
+  "keywords": [
+    "chiliz",
+    "socios",
+    "fan-token",
+    "fantasy-football",
+    "web3",
+    "blockchain"
+  ],
+  "author": "Fantasy League Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
+}
