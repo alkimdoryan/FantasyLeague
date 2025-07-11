@@ -7,6 +7,7 @@ import rateLimit from 'express-rate-limit'
 import { logger } from './utils/logger'
 import { errorHandler } from './middleware/errorHandler'
 import { notFoundHandler } from './middleware/notFoundHandler'
+import { initializeDatabase } from './utils/database'
 
 // Import routes
 import authRoutes from './routes/auth'
@@ -63,10 +64,28 @@ app.use(notFoundHandler)
 app.use(errorHandler)
 
 // Start server
-app.listen(PORT, () => {
-  logger.info(`🚀 Server running on port ${PORT}`)
-  logger.info(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`)
-  logger.info(`🔗 Health check: http://localhost:${PORT}/health`)
-})
+const startServer = async () => {
+  try {
+    // Initialize database
+    const dbConnected = await initializeDatabase()
+    if (!dbConnected) {
+      logger.error('❌ Failed to connect to database. Exiting...')
+      process.exit(1)
+    }
+
+    // Start server
+    app.listen(PORT, () => {
+      logger.info(`🚀 Server running on port ${PORT}`)
+      logger.info(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`)
+      logger.info(`🔗 Health check: http://localhost:${PORT}/health`)
+      logger.info(`📊 Database: SQLite connected`)
+    })
+  } catch (error) {
+    logger.error('❌ Failed to start server:', error)
+    process.exit(1)
+  }
+}
+
+startServer()
 
 export default app 
