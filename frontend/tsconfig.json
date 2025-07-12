@@ -8,6 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -24,4 +25,7 @@
     "vite.config.ts"
   ],
   "exclude": ["node_modules", "dist"]
+} 
+} 
+} 
 } 

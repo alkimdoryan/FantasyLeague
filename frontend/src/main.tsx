@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ConfigProvider } from 'antd'
-import App from './App.tsx'
+import App from './App'
 import './index.css'
+
+console.log('🚀 1. main.tsx yüklendi')
 
 // Create a client
 const queryClient = new QueryClient({
@@ -16,6 +18,8 @@ const queryClient = new QueryClient({
     },
   },
 })
+
+console.log('🚀 2. QueryClient oluşturuldu')
 
 // Ant Design theme configuration
 const theme = {
@@ -40,14 +44,26 @@ const theme = {
   },
 }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ConfigProvider theme={theme}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ConfigProvider>
-    </QueryClientProvider>
-  </React.StrictMode>,
-) 
+console.log('🚀 3. Theme konfigürasyonu hazırlandı')
+
+const rootElement = document.getElementById('root')
+if (rootElement) {
+  console.log('🚀 4. Root element bulundu, React render ediliyor...')
+  
+  const root = ReactDOM.createRoot(rootElement)
+  root.render(
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <ConfigProvider theme={theme}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ConfigProvider>
+      </QueryClientProvider>
+    </React.StrictMode>
+  )
+  
+  console.log('🚀 5. React render tamamlandı')
+} else {
+  console.error('❌ Root element bulunamadı!')
+} 

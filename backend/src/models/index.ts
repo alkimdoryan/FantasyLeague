@@ -9,7 +9,7 @@ League.hasMany(Season, { foreignKey: 'league_id', as: 'seasons' })
 Season.belongsTo(League, { foreignKey: 'league_id', as: 'league' })
 
 Season.hasMany(Match, { foreignKey: 'season_id', as: 'matches' })
-Match.belongsTo(Season, { foreignKey: 'season_id', as: 'season' })
+Match.belongsTo(Season, { foreignKey: 'season_id', as: 'seasonData' })
 
 Match.hasOne(MatchDetails, { foreignKey: 'match_id', sourceKey: 'match_id', as: 'details' })
 MatchDetails.belongsTo(Match, { foreignKey: 'match_id', targetKey: 'match_id', as: 'match' })

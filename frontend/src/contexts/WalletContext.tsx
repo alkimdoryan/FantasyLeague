@@ -85,7 +85,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const switchToChiliz = async () => {
     try {
       if (typeof window.ethereum !== 'undefined') {
-        await window.ethereum.request({
+        await window.ethereum?.request({
           method: 'wallet_switchEthereumChain',
           params: [{ chainId: CHILIZ_NETWORK.chainId }],
         })
@@ -94,7 +94,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       // Chain not added to MetaMask
       if (switchError.code === 4902) {
         try {
-          await window.ethereum.request({
+          await window.ethereum?.request({
             method: 'wallet_addEthereumChain',
             params: [CHILIZ_NETWORK],
           })
@@ -130,12 +130,12 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         window.location.reload()
       }
 
-      window.ethereum.on('accountsChanged', handleAccountsChanged)
-      window.ethereum.on('chainChanged', handleChainChanged)
+      window.ethereum?.on('accountsChanged', handleAccountsChanged)
+      window.ethereum?.on('chainChanged', handleChainChanged)
 
       return () => {
-        window.ethereum.removeListener('accountsChanged', handleAccountsChanged)
-        window.ethereum.removeListener('chainChanged', handleChainChanged)
+        window.ethereum?.removeListener('accountsChanged', handleAccountsChanged)
+        window.ethereum?.removeListener('chainChanged', handleChainChanged)
       }
     }
   }, [])

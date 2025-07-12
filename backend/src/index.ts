@@ -4,6 +4,7 @@ import helmet from 'helmet'
 import compression from 'compression'
 import dotenv from 'dotenv'
 import rateLimit from 'express-rate-limit'
+import path from 'path'
 import { logger } from './utils/logger'
 import { errorHandler } from './middleware/errorHandler'
 import { notFoundHandler } from './middleware/notFoundHandler'
@@ -20,20 +21,24 @@ import adminRoutes from './routes/admin'
 dotenv.config()
 
 const app = express()
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 8000
 
 // Security middleware
 app.use(helmet())
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: process.env.CORS_ORIGIN || ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:8000'],
   credentials: true,
 }))
 
-// Rate limiting
+// Rate limiting - more relaxed for development
 const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000'), // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'), // limit each IP to 100 requests per windowMs
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '60000'), // 1 minute
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '1000'), // limit each IP to 1000 requests per windowMs
   message: 'Too many requests from this IP, please try again later.',
+  skip: (req) => {
+    // Skip rate limiting for development
+    return process.env.NODE_ENV === 'development'
+  }
 })
 app.use('/api/', limiter)
 
@@ -41,6 +46,9 @@ app.use('/api/', limiter)
 app.use(compression())
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
+
+// Static file serving for images
+app.use('/api/data', express.static(path.join(__dirname, '../../data')))
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -79,7 +87,35 @@ const startServer = async () => {
       logger.info(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`)
       logger.info(`🔗 Health check: http://localhost:${PORT}/health`)
       logger.info(`📊 Database: SQLite connected`)
+      logger.info(`🖼️  Static files served from: ${path.join(__dirname, '../../data')}`)
     })
+  } catch (error) {
+    logger.error('❌ Failed to start server:', error)
+    process.exit(1)
+  }
+}
+
+startServer()
+
+export default app 
+  } catch (error) {
+    logger.error('❌ Failed to start server:', error)
+    process.exit(1)
+  }
+}
+
+startServer()
+
+export default app 
+  } catch (error) {
+    logger.error('❌ Failed to start server:', error)
+    process.exit(1)
+  }
+}
+
+startServer()
+
+export default app 
   } catch (error) {
     logger.error('❌ Failed to start server:', error)
     process.exit(1)

@@ -6,19 +6,15 @@ interface LeagueAttributes {
   name: string
   country?: string
   logo_url?: string
-  created_at?: Date
-  updated_at?: Date
 }
 
-interface LeagueCreationAttributes extends Optional<LeagueAttributes, 'id' | 'created_at' | 'updated_at'> {}
+interface LeagueCreationAttributes extends Optional<LeagueAttributes, 'id'> {}
 
 class League extends Model<LeagueAttributes, LeagueCreationAttributes> implements LeagueAttributes {
   public id!: number
   public name!: string
   public country?: string
   public logo_url?: string
-  public readonly created_at?: Date
-  public readonly updated_at?: Date
 }
 
 League.init(
@@ -45,6 +41,7 @@ League.init(
     sequelize,
     modelName: 'League',
     tableName: 'leagues',
+    timestamps: false,
   }
 )
 
